@@ -1,0 +1,25 @@
+<p *ngIf="player_data">{{ player_data | json }}</p>
+<p><audio controls #player (play)="play()" (pause)="pause()" (ended)="nextSong()"></audio></p>
+<form (submit)="newSong()">
+  <select name="pending_file" [(ngModel)]="pending_file">
+    <option *ngFor="let file of file_list">{{ file }}</option>
+  </select>
+  <input type="submit" value="Play">
+  <button type="button" (click)="queueSong()">Queue</button>
+</form>
+<table id="playlist" *ngIf="player_data">
+  <tbody>
+    <tr *ngFor="let file of player_data['playlist']; let i = index">
+      <td>{{ file }}</td>
+      <td>
+        <button *ngIf="i > 0" (click)="moveInQueue(i, -1)">^</button>
+        <button *ngIf="i < player_data['playlist'].length-1" (click)="moveInQueue(i, 1)">v</button>
+        <button (click)="removeFromQueue(i)">Remove</button>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<div *ngIf="player_data">
+  <button (click)="nextSong()">Play Next Song</button>
+  <button (click)="getSongList()">Update Available Songs</button>
+</div>
